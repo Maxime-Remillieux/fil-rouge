@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+$font-1: 'Roboto', sans-serif;
+
+$color-1: #2E3244;
+$color-2: #516079;
+$color-3: #C5C6C6;
+$color-4: #F1895C;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: $font-1;
+    background-color: $color-3;
+}
+
+li{
+    list-style-type: none;
+}
+
+a{
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+}
+
+.content{
+    max-width: 1290px;
+}
