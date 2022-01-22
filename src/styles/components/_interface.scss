@@ -10,53 +10,36 @@
     padding: 10px;
     font-size: 0.8em;
 
+
     button{
         padding: 5px;
     }
-    .fieldset{
-        div{
-            margin: 5px;
-        }
 
-    }
-    .addDiv{
-        input{
-            height: 25px;
-        }
-        label{
-            display: inline-block;
-            width: 100px;
+    // .addDiv{
+    //     input{
+    //         height: 25px;
+    //     }
+    //     label{
+    //         display: inline-block;
+    //         width: 100px;
             
-        }
-    }
-    .findDiv{
-        margin-top: 5px;
-        label{
-            margin: 5px;
-        }
-    }
-    fieldset{
-        padding: 10px;
-        margin-bottom: 10px;
-        label{
-            margin: 10px;
-            display: inline-block;
-        }
-        input{
-            margin: 5px;
-        }
-    }
+    //     }
+    // }
+
     h4{
         margin: 10px;
     }
 
     @media screen and (min-width: 850px) {
-        display: grid;
-        grid-template-columns: 40% 60%;
-        align-items: flex-start;
+        // display: grid;
+        // grid-template-columns: 300px 60%;
+        // display: flex;
+        // align-items: flex-start;
+        fieldset{
+            display: flex;
+        }
     }
     @media screen and (min-width: 1200px) {
-        
         display: flex;
         flex-direction: column;
         width: 350px;

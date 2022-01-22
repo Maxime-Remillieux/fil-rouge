@@ -1,0 +1,33 @@
+.linksDiv{
+    width: 100%;
+    ul{
+        border: 1px solid $color-1;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        border-radius: 4px;
+
+    }
+    svg{
+        position: relative;
+        top: 9px;
+    }
+    .dropdownLinks{
+        display: flex;
+        flex-direction: row;
+        border: 1px solid $color-1;
+        border-radius: 4px;
+
+    }
+    font-size: 0.9rem;
+    li{
+        width: 150px;
+        margin: 5px;
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        border-radius: 4px;
+        background-color: $color-1;
+    }
+}

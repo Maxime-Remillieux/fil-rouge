@@ -1,0 +1,72 @@
+#findDiv{
+    width: 100%;
+    #findInput{
+        width: 200px;
+    }
+    svg{
+        position: relative;
+        top: 5px;
+    }
+    .filters{
+        display: flex;
+    }
+    #checkbox label{
+        width: 85px;
+        margin: 3px;
+    }
+    .resetButton{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+    .flexRow{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        input{
+            height: 28px;
+            // width: 175px;
+        }
+        label{
+            position: relative;
+            top: -4px;
+            width:30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 3px;
+        }
+    }
+    .fieldset{
+        width: 100%;
+        div{
+            margin: 5px;
+        }
+        fieldset{
+            border: 1px solid $color-1;
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+
+            label{
+                margin: 10px;
+                display: inline-block;
+            }
+            input{
+                margin: 5px;
+            }
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
+        fieldset{
+            display: flex;
+            flex-direction: column;
+            #findInput{
+                width: 200px;
+            }
+        }
+    }
+}

@@ -1,10 +1,10 @@
 import Navigation from "./Navigation";
 
-const Header = () => {
+const Header = ({userData}) => {
     return (
         <header className="header">
             <h2>Biblio</h2>
-            <Navigation />
+            <Navigation userData={userData}/>
             <i className="fas fa-bars"></i>
         </header>
     );

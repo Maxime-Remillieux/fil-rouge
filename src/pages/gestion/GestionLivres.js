@@ -1,54 +1,97 @@
-import Header from "../../components/Header";
 import Interface from "../../components/interface/Interface";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import BookRow from "../../components/BookRow";
+import { Navigate } from "react-router-dom";
+import { BarWave } from "react-cssfx-loading";
+import { BouncingBalls } from "react-cssfx-loading";
 
-const GestionLivres = () => {
+
+const searchFields = {
+    "b.code": "Identifiant",
+    "b.title": "Titre",
+    "a.name": "Auteur",
+    "p.name": "Éditeur",
+    "c.name": "Collection",
+    "b.release_at": "Date",
+    "t.name": "Thème"
+};
+const url = "http://localhost:8000/api/book/";
+
+async function fetchApi(data, headers){
+    return axios
+    .post(url, data, {headers: headers})
+    .then(res => res.data);
+}
+const links = [
+    {text: 'Nouveau livre', path:'/gestion/livre/new'},
+    {text: 'Nouvel auteur', path:'/gestion/auteur/new'},
+    {text: 'Nouvel éditeur', path:'/gestion/editeur/new'},
+    {text: 'Nouvelle collection', path:'/gestion/collection/new'},
+    {text: 'Nouveau thème', path: '/gestion/theme/new'},
+];
+const GestionLivres = (props) => {
     const [books, setBooks] = useState([]);
-    const [playOnce, setPlayOnce] = useState(true);
-    const url = "http://localhost:8000/api/get/books";
-
-    useEffect(() => {
-        if(playOnce){
-            getBooks();
-        }
-    }, [books]);
-
+    const [keyword, setKeyword] = useState('');
+    const [loading, setLoading] = useState(true);
+    const {token} = props;
+    const {userData} = props;
+    const headers = {
+        "Content-Type": 'application/json',
+        "Authorization": 'Bearer ' + token
+    };
     const getBooks = () =>{
-        const data = getData();
-        axios
-        .post(url, data)
-        .then((res) => {
-            console.log(res.data);
-            setBooks(res.data);
-            setPlayOnce(false);
-        });   
+        let categories = document.querySelectorAll('.categ');
+        let dataObj = {};
+        if(keyword){
+            categories.forEach(cat => {
+                if(cat.checked)
+                    dataObj[cat.value] = keyword;
+            });
+        }
+        console.log(dataObj);
+        return fetchApi(dataObj, headers);
     }
 
-    const getData = () => {
-        let keyword = document.getElementById('findInput').value;
-        let categories = document.querySelectorAll('.categ');
-        let data = {};
+    useEffect(() => {
+        let isSubscribed = true;
+        
+        getBooks().then(res =>{
+            console.log(res);
+            if(isSubscribed){
+                setBooks(res);
+                setLoading(false);
+            }
+        });
 
-        if(keyword){
-            categories.forEach(cat =>{
-                if(cat.checked)
-                    data[cat.value] = keyword;
-            });        
+        return () => isSubscribed = false;
+    }, []);
+
+    if(userData){
+        if(!userData.roles.includes('ROLE_ADMIN')){
+            return <Navigate to='/'/>
         }
-        return data;
+    }else{
+        return <Navigate to='/login'/>
     }
 
     return (
         <div className="gestion">
-            <Header />
-            <Interface onClick={getBooks} />
-            <ul className="list">
-                {books.map((book)=> (
-                    <BookRow book={book} key={book.title}/>
-                ))}
-            </ul>
+            <Interface links={links} getEntityData={getBooks} searchFields={searchFields} page="books" setKeyword={setKeyword}/>
+            { loading &&
+            <div className="loading">
+                {/* <img src="/img/Spinner-2.gif" alt="loading"  width="50" /> */}
+                <BouncingBalls color='#516079' size="42px"/>
+            </div>
+            }
+            { !loading &&
+                <ul className="list">
+                    {books.map((book)=> (
+                        <BookRow book={book} key= {book.title}/>
+                    ))}
+                </ul>            
+            }
+
         </div>
     );
 }

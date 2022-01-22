@@ -29,7 +29,7 @@ const BookRow = (props) => {
             {focus &&
                 <div className="data-sup">
                     <img src={"/upload/books/" + book.img} alt="img" />
-                    <div>
+                    <div className="data-sup-text">
                         <ul>
                             <li><b>Paru le</b> {book.release_at}</li>
                             <li><b>Ajouté le</b> {book.added_at}</li>

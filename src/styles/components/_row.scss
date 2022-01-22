@@ -32,8 +32,13 @@
 
     .data-sup{
         display: flex;
+        justify-content: space-evenly;
     }
-
+    .data-sup-text{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     ul{
         display: flex;
         margin: 10px;
