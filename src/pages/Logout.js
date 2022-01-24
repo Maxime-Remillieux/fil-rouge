@@ -1,14 +1,7 @@
 import { Navigate } from "react-router-dom";
 
-const Logout = ({setToken, setUserData}) => {
-    const logoutUser = ()=>{
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setToken(undefined);
-        setUserData(undefined);
-    }
-    logoutUser();
-    // navigate('/home');
+const Logout = ({logout}) => {
+    logout();
     return(
         <Navigate to='/'/>
     )

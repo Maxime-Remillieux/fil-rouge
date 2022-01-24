@@ -1,13 +1,11 @@
-import AddBook from "./AddBook";
 import FindDiv from "./FindDiv";
 import LinksDiv from "./LinksDiv";
 
-const Interface = (props) => {
-
+const Interface = ({setKeyword, getData, data}) => {
     return (
         <div className="interface">
-            <FindDiv searchFields={props.searchFields} getEntityData={props.getEntityData} setKeyword={props.setKeyword} />
-            <LinksDiv links={props.links}/>
+            <FindDiv setKeyword={setKeyword} getData={getData} searchFields={data.searchFields}   />
+            <LinksDiv links={data.links}/>
         </div>
     );
 };

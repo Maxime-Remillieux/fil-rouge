@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Theme;
 use App\Entity\Author;
 use App\Entity\Collec;
 use DateTimeImmutable;
 use App\Entity\Publisher;
-use App\Entity\Theme;
 use Doctrine\ORM\EntityManager;
 use App\Repository\BookRepository;
 use App\Repository\ThemeRepository;
@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/api/book')]
@@ -31,7 +32,7 @@ class BookController extends AbstractController
         return $this->sendResponse(json_encode($books));
     }
 
-    #[Route('/{id}', name: 'book.show')]
+    #[Route('/show/{id}', name: 'book.show')]
     public function show(Book $book): Response
     {
         return $this->sendResponse(json_encode($book));
@@ -40,8 +41,14 @@ class BookController extends AbstractController
     #[Route('/new', name: 'book.new', methods:['POST'])]
     public function new(Request $req, BookRepository $repo, AuthorRepository $authorRepo, PublisherRepository $publisherRepo, CollecRepository $collecRepo, ThemeRepository $themeRepo, EntityManagerInterface $em): Response
     {
+        /** @var UploadedFile $img */
+        // $img = $req->files->get('img');
+        // dump($img);
+        // $destination = $this->getParameter('kernel.project_dir').'/public/upload/books';
+        // $imgName = uniqid().$img->getClientOriginalExtension();
+        // $img->move($destination, $imgName);
         $data = $req->toArray();
-        $img = $req->files->get('img');
+
         $book = new Book();
         $book->setTitle($data['title']);
         if($data['author']['id'] == 0){
@@ -96,7 +103,7 @@ class BookController extends AbstractController
         $book->setCode($this->generateCode($data['name'], $data['firstname'], $repo));
         $book->setAddedAt(new DateTimeImmutable("now"));
         $book->setReleaseAt(new DateTimeImmutable($data['release_at']));
-        $book->setImg($data['img']);
+        // $book->setImg($imgName);
         $book->setResume($data['resume']);
 
         $em->persist($book);

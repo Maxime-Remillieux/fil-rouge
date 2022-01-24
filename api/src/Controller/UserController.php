@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +25,7 @@ class UserController extends AbstractController
         return $this->sendResponse(json_encode($users));
     }
 
-    #[Route('/{id}', name: 'user.show')]
+    #[Route('/show/{id}', name: 'user.show')]
     public function show(User $user): Response
     {
         return $this->sendResponse(json_encode($user));
@@ -43,14 +44,17 @@ class UserController extends AbstractController
         $user->setPostCode($data['post_code']);
         $user->setCity($data['city']);
         $user->setPhone($data['phone']);
-        $user->setEmail($data['mail']);
+        $user->setEmail($data['email']);
         $user->setRoles([$data['role']]);
         $user->setRegisteredAt(new DateTimeImmutable("now"));
 
-        $em->persist($user);
-        $em->flush();
-
-        return $this->sendResponse(json_encode($user));
+        try{
+            $em->persist($user);
+            $em->flush();
+            return $this->sendResponse(json_encode(['status'=> "OK", 'message'=> 'USER ADDED SUCCESSFULLY']));
+        }catch(Exception $e){
+            return $this->sendResponse(json_encode(['status'=> "ERROR", 'message'=>$e->getMessage()]));
+        }
     }
 
     public function sendResponse($content){
@@ -85,5 +89,6 @@ class UserController extends AbstractController
         while(strlen($n) < $size){
             $n = '0'.$n;
         }
+        return $n;
     }
 }

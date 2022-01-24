@@ -1,4 +1,5 @@
-.gestion{
+.gestion, .newBook{
+
     .list{
         padding: 5px;
     }
@@ -12,7 +13,25 @@
         margin: auto;
     }
     @media screen and (min-width: 1200px){
+        // flex-direction: row;
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: 350px 1fr;
+    }
+    .bookForm{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        align-content: flex-start;
+    }
+}
+
+.newBook{
+    display: flex;
+    flex-direction: column;
+    @media screen and (min-width: 1200px){
+        flex-direction: row;
+
     }
 }

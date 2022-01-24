@@ -1,37 +1,27 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
-import GestionLivres from "./pages/gestion/GestionLivres";
-import GestionUsers from "./pages/gestion/GestionUsers";
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import NotFound from "./pages/NotFound";
-import { useState } from "react";
 import Header from "./components/Header";
+import Gestion from "./pages/gestion/Gestion";
+import useAuth from "./hooks/security/useAuth";
 // import { Navigate } from "react-router-dom";
 
 const App = () => {
-  const [token, setToken] = useState(()=>{
-    const savedToken = localStorage.getItem('token');
-    return savedToken || undefined;
-  });
-  const [userData, setUserData] = useState(()=>{
-    const savedUser = localStorage.getItem('user');
-    const connectedUser = JSON.parse(savedUser);
-    return connectedUser || undefined;
-  });
-
+  const [userState, login, logout, isGranted] = useAuth();
 
   return (
     <BrowserRouter>
-      <Header userData={userData}/>
+      <Header userState={userState} isGranted={isGranted}/>
       <Routes>
           <Route path="/" exact element={<Home />} />
-          <Route path="/gestion/livres" exact element={<GestionLivres token={token} userData={userData}/>} />
-          <Route path="/gestion/users" exact element={<GestionUsers token={token} userData={userData}/>} />   
+          <Route path="/gestion/*" element={<Gestion userState={userState} isGranted={isGranted}/>} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login setToken={setToken} setUserData={setUserData} />} />
-          <Route path="/logout" element={<Logout setToken={setToken} setUserData={setUserData} />} />
+          <Route path="/login" element={<Login login={login}/>} />
+          <Route path="/logout" element={<Logout logout={logout} />} />
+          <Route path="/notfound" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

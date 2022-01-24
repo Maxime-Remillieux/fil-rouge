@@ -7,26 +7,24 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 
 class AuthenticationSuccessListener
 {
-    
 /**
  * @param AuthenticationSuccessEvent $event
+ * @param RoleHierarchyInterface $roleHierarchy
  */
-public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
-{
-    $data = $event->getData();
-    $user = $event->getUser();
+    public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
+    {
+        $data = $event->getData();
+        $user = $event->getUser();
 
-    if (!$user instanceof UserInterface) {
-        return;
+        if (!$user instanceof UserInterface) {
+            return;
+        }
+
+        $data['roles'] = $user->getRoles();
+        $data['user'] = $user->getUserIdentifier();
+
+        $event->setData($data);
     }
-
-    $data['data'] = array(
-        'roles' => $user->getRoles(),
-        'user' => $user->getUserIdentifier()
-    );
-
-    $event->setData($data);
-}
 
 }
 

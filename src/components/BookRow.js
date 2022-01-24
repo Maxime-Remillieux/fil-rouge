@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 const BookRow = (props) => {
-    const { book } = props;
+    const { data } = props;
     const [focus, setFocus] = useState(false);
 
     const toggleFocus = () => {
         let rows = document.querySelectorAll('.row');
         rows.forEach(row => {
-            if(row.dataset.focus === "true"){
+            if (row.dataset.focus === "true") {
                 row.click();
             }
         });
@@ -15,44 +15,43 @@ const BookRow = (props) => {
     }
 
     return (
-        <li className="row" data-focus={ focus } onClick = { toggleFocus }>
+        <li className={"row"} data-focus={ focus } onClick={toggleFocus}>
             <div className="data-main">
                 <ul>
-                    <li><b>Code</b> {book.code}</li>
-                    <li><b>Titre</b> {book.title}</li>
-                    <li><b>Auteur</b> {book.author.firstname + ' ' + book.author.name}</li>
-                    <li><b>Éditeur</b> {book.publisher.name}</li>
-                    <li><b>Collection</b> {book.collection.name}</li>
+                    <li><b>Code</b> {data.code}</li>
+                    <li><b>Titre</b> {data.title}</li>
+                    <li><b>Auteur</b> {data.author.firstname + ' ' + data.author.name}</li>
+                    <li><b>Éditeur</b> {data.publisher.name}</li>
                 </ul>
             </div>
 
-            {focus &&
-                <div className="data-sup">
-                    <img src={"/upload/books/" + book.img} alt="img" />
-                    <div className="data-sup-text">
-                        <ul>
-                            <li><b>Paru le</b> {book.release_at}</li>
-                            <li><b>Ajouté le</b> {book.added_at}</li>
-                            <li><b>Thèmes</b>{
-                                
-                                book.themes.map((theme, i)=>{
-                                    if(i !== book.themes.length - 1) {
-                                        return (theme.name + ', ');
-                                    }else{
-                                        return theme.name;
-                                    }
-                                })
-                            }</li>
-                        </ul>
-                        <ul className="links">
-                            <li><a href="#">Modifer</a></li>
-                            <li><a href="#">Retirer</a></li>
-                            <li><a href="#">Reserver</a></li>
-                        </ul>
-                    </div>
-                </div>
-            }
+            <div className={"data-sup" + (focus ? ' active' : '')}>
+                {/* <div> */}
+                    <img src={"/upload/books/" + data.img} alt="img" />
+                {/* </div> */}
+                <div className="data-sup-text">
+                    <ul>
+                        <li><b>Collection</b> {data.collection.name}</li>
+                        <li><b>Paru le</b> {data.release_at}</li>
+                        <li><b>Ajouté le</b> {data.added_at}</li>
+                        <li><b>Thèmes</b>{
 
+                            data.themes.map((theme, i) => {
+                                if (i !== data.themes.length - 1) {
+                                    return (theme.name + ', ');
+                                } else {
+                                    return theme.name;
+                                }
+                            })
+                        }</li>
+                    </ul>
+                    <ul className="links">
+                        <li><a href={"/gestion/book/edit/" + data.id}>Modifer</a></li>
+                        {/* <li><a href="#">Retirer</a></li> */}
+                        <li><a href="#">Réservation</a></li>
+                    </ul>
+                </div>
+            </div>
         </li>
     );
 }

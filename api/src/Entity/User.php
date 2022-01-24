@@ -221,9 +221,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     }
 
     /**
-     * @return Collection|Loan[]
+     * @return Collection|Loan[]|null
      */
-    public function getLoans(): Collection
+    public function getLoans(): ?Collection
     {
         return $this->loans;
     }
@@ -253,18 +253,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     public function toArray(){
         $emprunts = $this->getLoans();
         $empArray = [];
-        foreach($emprunts as $emprunt){
-            $livre = $emprunt->getBook();
-            
-            $empArray[] = [
-                'id' => $emprunt->getId(),
-                'status' => $emprunt->getStatus(),
-                'id_livre' => $livre->getId(),
-                'code_livre' => $livre->getCode(),
-                'titre'=> $livre->getTitle(),
-                'auteur' => $livre->getAuthor()->toArray()
-            ];
+
+        if($emprunts){
+            foreach($emprunts as $emprunt){
+                $livre = $emprunt->getBook();
+                
+                $empArray[] = [
+                    'id' => $emprunt->getId(),
+                    'status' => $emprunt->getStatus(),
+                    'id_livre' => $livre->getId(),
+                    'code_livre' => $livre->getCode(),
+                    'titre'=> $livre->getTitle(),
+                    'auteur' => $livre->getAuthor()->toArray()
+                ];
+            }
         }
+
 
         return array(
             'id' => $this->getId(),
