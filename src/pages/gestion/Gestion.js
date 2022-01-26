@@ -6,27 +6,33 @@ import { Navigate } from "react-router-dom";
 import NewBook from "./NewBook";
 import NewUser from "./NewUser";
 
-const Gestion = ({userState, isGranted}) => {
+const Gestion = ({userState, isGranted, setError}) => {
     // const [keyword, setKeyword] = useState('');
     const {userData} = userState;
     const {userConnected} = userState;
+
+    if(!userConnected){
+        setError('Connectez-vous pour accéder à cette page');
+        return <Navigate to='/login'/>
+    } 
+
+    if(!isGranted('ROLE_ADMIN')){
+        setError('Vous n\'avez pas les droits pour accéder à cette page');
+        return <Navigate to='/'/>
+    } 
 
     const headers = {
         "Content-Type": 'application/json',
         "Authorization": 'Bearer ' + userData.token
     };
 
-    if(!userConnected) return <Navigate to='/login'/>
-
-    if(!isGranted('ROLE_ADMIN')) return <Navigate to='/'/>
-
     return (
         <Routes>
             <Route path="/" element={<GestionHome />} />
-            <Route path="/livres" element={<GestionLivres headers={headers}/>}/>
-            <Route path="/users" element={<GestionUsers headers={headers}/>}/>
-            <Route path="/livre/new" element={<NewBook headers={headers}/>}/>
-            <Route path="/user/new" element={<NewUser headers={headers}/>}/>
+            <Route path="/livres" element={<GestionLivres headers={headers} setError={setError}/>}/>
+            <Route path="/users" element={<GestionUsers headers={headers} setError={setError}/>}/>
+            <Route path="/livre/new" element={<NewBook headers={headers} setError={setError}/>}/>
+            <Route path="/user/new" element={<NewUser headers={headers} setError={setError}/>}/>
         </Routes>
     );
 };

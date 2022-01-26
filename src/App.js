@@ -7,19 +7,24 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import Gestion from "./pages/gestion/Gestion";
 import useAuth from "./hooks/security/useAuth";
+import { useState } from "react";
 // import { Navigate } from "react-router-dom";
 
 const App = () => {
   const [userState, login, logout, isGranted] = useAuth();
+  const [error, setError] = useState('')
 
   return (
     <BrowserRouter>
       <Header userState={userState} isGranted={isGranted}/>
+      { error &&
+        <span className="errorMessage">{error}</span>
+      }
       <Routes>
-          <Route path="/" exact element={<Home />} />
-          <Route path="/gestion/*" element={<Gestion userState={userState} isGranted={isGranted}/>} />
+          <Route path="/" exact element={<Home error={error} />} />
+          <Route path="/gestion/*" element={<Gestion userState={userState} isGranted={isGranted} setError={setError}/>} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login login={login}/>} />
+          <Route path="/login" element={<Login login={login} error={error} setError={setError}/>} />
           <Route path="/logout" element={<Logout logout={logout} />} />
           <Route path="/notfound" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />

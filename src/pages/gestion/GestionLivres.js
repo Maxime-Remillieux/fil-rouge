@@ -24,7 +24,7 @@ const links = [
 
 
 
-const GestionLivres = ({headers}) => {
+const GestionLivres = ({headers, setError}) => {
     const pageData= {
         interfaceData: {
             links: links,
@@ -35,7 +35,7 @@ const GestionLivres = ({headers}) => {
     }
 
 
-    return <GestionTable row={BookRow} pageData={pageData}/>
+    return <GestionTable row={BookRow} pageData={pageData} setError={setError}/>
 }
 
 export default GestionLivres;

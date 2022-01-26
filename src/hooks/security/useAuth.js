@@ -1,27 +1,27 @@
 import axios from "axios";
 import { useState } from "react";
 
-const useAuth = ()=>{
-    const[userState, setUserState] = useState(()=>{
+const useAuth = () => {
+    const [userState, setUserState] = useState(() => {
         const savedUser = localStorage.getItem('user');
         const connectedUser = JSON.parse(savedUser);
         let initialState = {};
-        if(connectedUser){
+        if (connectedUser) {
             initialState = {
                 userConnected: true,
                 userData: connectedUser
             }
-        }else{
+        } else {
             initialState = {
                 userConnected: false,
                 userData: undefined
-            } 
+            }
         }
         return initialState;
     });
 
     function isGranted(role) {
-        if(userState.userConnected){
+        if (userState.userConnected) {
             if (userState.userData.roles.includes(role)) {
                 return true;
             }

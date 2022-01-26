@@ -1,37 +1,64 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const useFetch = (initialData)=>{
-    const navigate = useNavigate();
-    const [requestData, updateRequestData] = useState(initialData);
+const useRequestData = (url, headers) => {
+    const [requestData, setRequestData] = useState({ url: url, headers: headers, data: {} });
+    const [keyword, setKeyword] = useState('');
+
+    const updateRequestData = useCallback(() => {
+        let categories = document.querySelectorAll('.categ');
+        let dataObj = {};
+        if (keyword) {
+            categories.forEach(cat => {
+                if (cat.checked)
+                    dataObj[cat.value] = keyword;
+            });
+        }
+        setRequestData(rd => ({ ...rd, data: dataObj }));
+    }, [keyword])
+
+    useEffect(() => {
+        updateRequestData();
+    }, [updateRequestData])
+
+    return [setKeyword, requestData, updateRequestData]
+}
+
+const useFetch = (url, headers) => {
     const [state, setState] = useState({
         loading: true,
         data: [],
+        error: ''
     })
+    const [setKeyword, requestData, updateRequestData] = useRequestData(url, headers);
 
-    useEffect(()=>{
-        (async function () {
-            console.log(requestData.url);
-            try{
-                const result = await axios.post(requestData.url, requestData.data, {headers: requestData.headers})
-                if(result.status === 200){
-                    setState({
-                        data: result.data,
-                        loading: false
-                    });
-                }
-            }catch(error){
-                setState(s=>({...s, loading: false}));
-                console.log(error.response.data.message);
-                if(error.response.data.message === 'Expired JWT Token'){
-                    navigate('/logout');
-                }
+    const fetchApi = useCallback(async () => {
+        setState(s => ({ ...s, loading: true }));
+
+        try {
+            const result = await axios.post(requestData.url, requestData.data, { headers: requestData.headers });
+            if (result.status === 200) {
+                setState(s => ({
+                    data: result.data,
+                    loading: false,
+                    error: ''
+                }));
             }
-        })()
+        } catch (error) {
+            console.log(error.response.data.message);
+            setState(s => ({
+                ...s,
+                loading: false,
+                error: error.response.data.message
+            }));
+        }
     }, [requestData])
 
-    return [state.loading, state.data, updateRequestData]
+    useEffect(()=>{
+        fetchApi();
+    }, [fetchApi])
+
+    return [state.loading, state.data, state.error, fetchApi, setKeyword, updateRequestData];
 }
 
 export default useFetch

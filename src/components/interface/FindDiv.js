@@ -4,19 +4,18 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 
-const FindDiv = (props) => {
-    const { searchFields } = props
+const FindDiv = ({searchFields, fetchApi, setKeyword, updateRequestData}) => {
     const[focus, setFocus] = useState(false)
     const resetSearch = (e) => {
         e.preventDefault();
         document.getElementById('findInput').value = "";
-        props.setKeyword('');
-        props.getData();
+        setKeyword('');
+        fetchApi();
     }
     const handleKeyPress = (e) => {
         if (e.code === "Enter") {
             e.preventDefault();
-            props.getData();
+            fetchApi();
         }
     }
 
@@ -28,7 +27,7 @@ const FindDiv = (props) => {
         <div id="findDiv">
             <div className='fieldset'>
                 <fieldset>
-                    <div className="flexRow"><label htmlFor="findInput"><BiSearchAlt size="28px" /></label><input onKeyDown={handleKeyPress} onChange={e => props.setKeyword(e.target.value)} type="text" id="findInput" /><div className='resetButton' onClick={resetSearch}><FaUndoAlt size="20px" /></div></div><br />
+                    <div className="flexRow"><label htmlFor="findInput"><BiSearchAlt size="28px" /></label><input onKeyDown={handleKeyPress} onChange={e => setKeyword(e.target.value)} type="text" id="findInput" /><div className='resetButton' onClick={resetSearch}><FaUndoAlt size="20px" /></div></div><br />
                 </fieldset>
                 <div className={"dropdownLinks" + (focus ? " active" : "")} onClick={toggleFocus}><h4>Filtres</h4>{focus? <IoIosArrowDown size="20px"/>:<IoIosArrowUp size="20px"/>}</div>
                 <div className={"filters" + (focus ? " active" : "")}>
@@ -38,7 +37,7 @@ const FindDiv = (props) => {
                             <label><input type="checkbox" id="selectAll" defaultChecked />Tout</label>
                             {
                                 Object.keys(searchFields).map((field) => (
-                                    <label key={field}><input type="checkbox" className="categ" value={field} defaultChecked />{searchFields[field]}</label>
+                                    <label key={field}><input type="checkbox" onClick={updateRequestData} className="categ" value={field} defaultChecked />{searchFields[field]}</label>
                                 ))
                             }
                         </div>
