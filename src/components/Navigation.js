@@ -1,9 +1,11 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { BiLogIn } from "react-icons/bi"
 import { BiLogOut } from "react-icons/bi"
 
 const Navigation = ({userState, isGranted}) => {
     const {userConnected} = userState;
+    const navigate = useNavigate();
+
     return (
         <div className="navigation">
             <NavLink exact="true" to="/">Acceuil</NavLink>

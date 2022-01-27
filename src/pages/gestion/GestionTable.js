@@ -6,8 +6,8 @@ import Navbar from "../../components/interface/Navbar";
 import { BouncingBalls } from 'react-cssfx-loading';
 
 
-const GestionTable = ({ row: Row, pageData, setError }) => {
-    const [loading, data, error, fetchApi, setKeyword, updateRequestData] = useFetch(pageData.url, pageData.headers);
+const GestionTable = ({ row: Row, pageData, setError, error }) => {
+    const [loading, data, fetchApi, setKeyword, updateRequestData] = useFetch(pageData.url, pageData.headers);
 
     const navigate = useNavigate();
 

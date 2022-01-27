@@ -13,7 +13,7 @@ const url = "http://localhost:8000/api/user/";
 const links = [
     {text: 'Nouvel utilisateur', path: '/gestion/user/new'}
 ];
-const GestionUsers = ({headers}) => {
+const GestionUsers = ({headers, logout}) => {
     const pageData= {
         interfaceData: {
             links: links,
@@ -22,7 +22,7 @@ const GestionUsers = ({headers}) => {
         url: url,
         headers: headers
     }
-    return <GestionTable row={UserRow} pageData={pageData}/>
+    return <GestionTable row={UserRow} pageData={pageData}  logout={logout}/>
 }
 
 export default GestionUsers;

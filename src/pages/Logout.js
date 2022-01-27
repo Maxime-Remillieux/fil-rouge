@@ -1,10 +1,15 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Logout = ({logout}) => {
-    logout();
-    return(
-        <Navigate to='/'/>
-    )
+const Logout =  ({ logout }) => {
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        logout();
+        navigate('/');     
+    }, [logout, navigate])
+
+    return null;
 };
 
 export default Logout;

@@ -1,15 +1,21 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 
-const Login = ({ login }) => {
+const Login = ({ login, error, setError }) => {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const[error, setError] = useState('');
     const navigate = useNavigate();
+
+    // useEffect(()=>{
+    //     return () =>{
+    //         console.log('page change');
+    //         setError('');
+    //     } 
+    // }, [setError])
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -19,13 +25,15 @@ const Login = ({ login }) => {
         }
         console.log(data);
         try{
-            await login(data)
+            await login(data);
+            setError('');
             navigate("/");
         }catch(e){
             console.log(e.message);
-            console.log(e.response.status);
             if(e.response.status === 401){
-                setError('Identifiants erronés');
+                setError('Email ou mot de passe erronés');
+            }else{
+                setError('Une erreur s\'est produite, veuillez réessayer')
             }
         }
 

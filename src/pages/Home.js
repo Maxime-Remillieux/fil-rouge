@@ -1,7 +1,19 @@
+import { useEffect } from "react";
 
-const Home = () =>{
+const Home = ({error, setError}) =>{
+
+    // useEffect(()=>{
+    //     return () =>{
+    //         console.log('page change');
+    //         setError('');
+    //     } 
+    // }, [setError])
+
     return(
         <div className="home">
+            { error &&
+                <div className="errorMessage">{error}</div>
+            }
             <div className="content">
                 <h1>Acceuil</h1>
                 <br />
