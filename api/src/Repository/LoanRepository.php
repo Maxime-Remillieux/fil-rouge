@@ -19,32 +19,36 @@ class LoanRepository extends ServiceEntityRepository
         parent::__construct($registry, Loan::class);
     }
 
-    // /**
-    //  * @return Loan[] Returns an array of Loan objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    /**
+     * @return Loan[] Returns an array of Loan objects
+     */
+    public function searchLoans(?array $data = null){
+        $em =$this->getEntityManager();
+        $qb = $em->createQueryBuilder();
 
-    /*
-    public function findOneBySomeField($value): ?Loan
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb->select("l")
+        ->from('App\Entity\Loan', 'l');
+
+        if($data != null){
+            $qb->join('l.book', 'b')
+            ->join('l.user', 'u');
+
+            $i = 1;
+            foreach ($data as $key => $value) {
+                if($i == 1){
+                    $qb->where($key . ' like ?' . $i);
+                }else{
+                    $qb->orWhere($key . ' like ?' . $i);
+                }
+                $qb->setParameter($i, '%' . $value . '%');
+                $i++;
+            }
+        }
+
+        $query = $qb->getQuery();
+        $loans = $query->getResult();
+
+        return $loans;
     }
-    */
+
 }

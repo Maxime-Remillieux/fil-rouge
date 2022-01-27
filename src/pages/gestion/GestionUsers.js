@@ -1,5 +1,5 @@
 
-import UserRow from "../../components/UserRow";
+import UserRow from "../../components/rows/UserRow";
 import GestionTable from "./GestionTable";
 
 

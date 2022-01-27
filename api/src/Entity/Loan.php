@@ -26,6 +26,12 @@ class Loan implements JsonSerializable
     #[ORM\Column(type: 'string', length: 255)]
     private $status;
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    private $create_at;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private $return_at;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,8 +65,9 @@ class Loan implements JsonSerializable
     {
         return array(
             'id' => $this->getId(),
-            'user' => $this->getUser()->toArray(),
-            'book_id' => $this->getBook()->getId()
+            'status' => $this->getStatus(),
+            'user' => $this->getUser(),
+            'book' => $this->getBook()
         );
     }
 
@@ -77,6 +84,30 @@ class Loan implements JsonSerializable
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCreateAt(): ?\DateTimeImmutable
+    {
+        return $this->create_at;
+    }
+
+    public function setCreateAt(\DateTimeImmutable $create_at): self
+    {
+        $this->create_at = $create_at;
+
+        return $this;
+    }
+
+    public function getReturnAt(): ?\DateTimeImmutable
+    {
+        return $this->return_at;
+    }
+
+    public function setReturnAt(\DateTimeImmutable $return_at): self
+    {
+        $this->return_at = $return_at;
 
         return $this;
     }

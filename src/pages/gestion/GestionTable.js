@@ -27,7 +27,7 @@ const GestionTable = ({ row: Row, pageData, setError }) => {
                 {!loading &&
                     <ul className="list">
                         {data.map(element => (
-                            <Row data={element} key={element.code} />
+                            <Row data={element} key={element.id} />
                         ))}
                     </ul>
                 }

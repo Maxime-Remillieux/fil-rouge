@@ -1,5 +1,5 @@
 
-import BookRow from "../../components/BookRow";
+import BookRow from "../../components/rows/BookRow";
 import GestionTable from "./GestionTable";
 
 

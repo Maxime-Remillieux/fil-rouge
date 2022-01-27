@@ -49,6 +49,9 @@ class Book implements JsonSerializable
     #[ORM\ManyToMany(targetEntity: Theme::class, inversedBy: 'books')]
     private $themes;
 
+    #[ORM\OneToOne(mappedBy: 'book', targetEntity: Loan::class, cascade: ['persist', 'remove'])]
+    private $loan;
+
 
     public function __construct()
     {
@@ -217,5 +220,17 @@ class Book implements JsonSerializable
     public function jsonSerialize(): mixed
     {
         return $this->toArray();
+    }
+
+    public function getLoan(): ?Loan
+    {
+        return $this->loan;
+    }
+
+    public function setLoan(?Loan $loan): self
+    {
+        $this->loan = $loan;
+
+        return $this;
     }
 }
