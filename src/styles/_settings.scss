@@ -12,6 +12,9 @@ $color-4: #F1895C;
     padding: 0;
     box-sizing: border-box;
 }
+html {
+    width: 100vw;
+}
 
 #root{
     max-width: 1290px;
@@ -36,6 +39,7 @@ a{
     cursor: pointer;
     color: white;
 }
+
 a:hover{
     color: $color-4
 }
@@ -43,9 +47,11 @@ a:hover{
 .content{
     max-width: 1290px;
 }
+
 label{
     display: inline-block;
 }
+
 .errorMessage{
     text-align: center;
     border: 1px solid $color-1;

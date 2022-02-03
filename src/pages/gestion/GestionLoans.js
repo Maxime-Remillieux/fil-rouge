@@ -16,16 +16,15 @@ const url = "http://localhost:8000/api/loan/";
 const links = [
     {text: 'Nouvel emprunt', path:'/gestion/emprunt/new'}
 ];
-const GestionLoans = ({headers, logout}) => {
+const GestionLoans = () => {
     const pageData= {
         interfaceData: {
             links: links,
             searchFields: searchFields
         },
-        url: url,
-        headers: headers
+        url: url
     }
-    return <GestionTable row={LoanRow} pageData={pageData}  logout={logout}/>
+    return <GestionTable row={LoanRow} pageData={pageData}/>
 }
 
 export default GestionLoans;

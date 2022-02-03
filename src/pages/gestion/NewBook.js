@@ -7,17 +7,11 @@ const links=[
 ]
 const searchFields = {};
 
-
-
-const NewBook = ({headers}) => {
-    const pageData = {
-        headers: headers,
-        entity: 'book',
-    }
+const NewBook = () => {
     return (
         <div className="newBook">
             <Interface data={ {searchFields: searchFields, links: links} } />
-            <New pageData={pageData} form={BookForm}/>
+            <New entity={'book'} form={BookForm}/>
         </div>
     );
 };

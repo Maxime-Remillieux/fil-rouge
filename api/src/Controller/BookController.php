@@ -103,7 +103,7 @@ class BookController extends AbstractController
         $book->setCode($this->generateCode($data['name'], $data['firstname'], $repo));
         $book->setAddedAt(new DateTimeImmutable("now"));
         $book->setReleaseAt(new DateTimeImmutable($data['release_at']));
-        // $book->setImg($imgName);
+        $book->setImg('');
         $book->setResume($data['resume']);
 
         $em->persist($book);

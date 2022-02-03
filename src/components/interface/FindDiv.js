@@ -26,9 +26,9 @@ const FindDiv = ({searchFields, fetchApi, setKeyword, updateRequestData}) => {
     return (
         <div id="findDiv">
             <div className='fieldset'>
-                <fieldset>
+                <div>
                     <div className="flexRow"><label htmlFor="findInput"><BiSearchAlt size="28px" /></label><input onKeyDown={handleKeyPress} onChange={e => setKeyword(e.target.value)} type="text" id="findInput" /><div className='resetButton' onClick={resetSearch}><FaUndoAlt size="20px" /></div></div><br />
-                </fieldset>
+                </div>
                 <div className={"dropdownLinks" + (focus ? " active" : "")} onClick={toggleFocus}><h4>Filtres</h4>{focus? <IoIosArrowDown size="20px"/>:<IoIosArrowUp size="20px"/>}</div>
                 <div className={"filters" + (focus ? " active" : "")}>
                     <div className="flexCol">
@@ -42,7 +42,7 @@ const FindDiv = ({searchFields, fetchApi, setKeyword, updateRequestData}) => {
                             }
                         </div>
                     </div>
-                    <div>
+                    <div className='selectFilters'>
                         <div>
                             <label htmlFor="tri">Trier par</label>
                             <select name="tri" id="tri">

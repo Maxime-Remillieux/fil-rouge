@@ -3,13 +3,15 @@
 namespace App\Controller;
 
 // use App\Entity\User;
+use Exception;
 use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,14 +34,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'user.new', methods:['POST'])]
-    public function new(Request $req, UserRepository $repo, EntityManagerInterface $em): Response
+    public function new(Request $req, UserRepository $repo, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $data = $req->toArray();
         $user = new User();
         $user->setName($data['name']);
         $user->setFirstname($data['firstname']);
         $user->setCode($this->generateCode($data['name'], $data['firstname'], $repo));
-        $user->setPassword($this->generatePassword());
+        $clearPass = $this->generatePassword();
+        $user->setPassword(password_hash($clearPass, PASSWORD_DEFAULT));
         $user->setAdress($data['adress']);
         $user->setPostCode($data['post_code']);
         $user->setCity($data['city']);
@@ -51,6 +54,7 @@ class UserController extends AbstractController
         try{
             $em->persist($user);
             $em->flush();
+            $this->sendMail($user, $clearPass, $mailer);
             return $this->sendResponse(json_encode(['status'=> "OK", 'message'=> 'USER ADDED SUCCESSFULLY']));
         }catch(Exception $e){
             return $this->sendResponse(json_encode(['status'=> "ERROR", 'message'=>$e->getMessage()]));
@@ -67,12 +71,27 @@ class UserController extends AbstractController
         return $resp;
     }
 
+    private function sendMail(User $user, string $pass, MailerInterface $mailer){
+        $email = (new Email())
+        ->from('noreply@gmail.com')
+        ->to($user->getEmail())
+        //->cc('cc@example.com')
+        //->bcc('bcc@example.com')
+        //->replyTo('fabien@example.com')
+        //->priority(Email::PRIORITY_HIGH)
+        ->subject('Création de votre compte')
+        // ->text()
+        ->html("<h1>Bonjour {$user->getFirstname()} Votre compte à bien été créé </h1></br><p>Voici votre mot de passe provisoire, veuillez le modifier à votre première connection : $pass</p>");
+
+        $mailer->send($email);
+    }
+
     private function generatePassword(){
         $password = '';
         for ($i=0; $i < 10; $i++) { 
             $password .= rand(0, 9);
         }
-        return password_hash($password, PASSWORD_DEFAULT);
+        return $password;
     }
 
     //génère les codes des livres et utilisateurs

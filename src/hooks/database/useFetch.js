@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const useRequestData = (url, headers) => {
-    const [requestData, setRequestData] = useState({ url: url, headers: headers, data: {} });
+const useRequestData = () => {
+    const [requestData, setRequestData] = useState({});
     const [keyword, setKeyword] = useState('');
 
-    const updateRequestData = useCallback(() => {
+    const updateRequestData = useCallback(async () => {
+        console.log('update data');
         let categories = document.querySelectorAll('.categ');
         let dataObj = {};
         if (keyword) {
@@ -14,7 +15,8 @@ const useRequestData = (url, headers) => {
                     dataObj[cat.value] = keyword;
             });
         }
-        setRequestData(rd => ({ ...rd, data: dataObj }));
+        setRequestData(dataObj);
+        console.log(requestData);
     }, [keyword])
 
     useEffect(() => {
@@ -28,20 +30,22 @@ const useFetch = (url, headers) => {
     const [state, setState] = useState({
         loading: true,
         data: [],
-        error: ''
+        fetchError: ''
     })
-    const [setKeyword, requestData, updateRequestData] = useRequestData(url, headers);
+    const [setKeyword, requestData, updateRequestData] = useRequestData();
 
     const fetchApi = useCallback(async () => {
         setState(s => ({ ...s, loading: true }));
 
+        console.log(requestData);
         try {
-            const result = await axios.post(requestData.url, requestData.data, { headers: requestData.headers });
+            const result = await axios.post(url, requestData, { headers: headers });
             if (result.status === 200) {
+                console.log(result.data);
                 setState(s => ({
                     data: result.data,
                     loading: false,
-                    error: ''
+                    fetchError: ''
                 }));
             }
         } catch (error) {
@@ -49,16 +53,18 @@ const useFetch = (url, headers) => {
             setState(s => ({
                 ...s,
                 loading: false,
-                error: error.response.data.message
+                fetchError: error.response.data.message
             }));
         }
-    }, [requestData])
+    }, [])
+
+    // fetchApi();
 
     useEffect(()=>{
         fetchApi();
-    }, [fetchApi])
+    }, [])
 
-    return [state.loading, state.data, state.error, fetchApi, setKeyword, updateRequestData];
+    return [state.loading, state.data, state.fetchError, fetchApi, setKeyword, updateRequestData];
 }
 
 export default useFetch

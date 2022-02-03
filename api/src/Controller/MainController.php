@@ -31,6 +31,14 @@ class MainController extends AbstractController {
         $em->flush();
         return $this->render('/test.html.twig', ['user'=>$user]);
     }
+    
+    #[Route('/test2', name:"test2")]
+    function test2(UserRepository $userRepo, EntityManagerInterface $em): Response{
+        $user = new User();
+        $em->persist($user);
+        $em->flush();
+        return $this->render('/test.html.twig', ['user'=>$user]);
+    }
 
     private function generatePassword(){
         $password = '';

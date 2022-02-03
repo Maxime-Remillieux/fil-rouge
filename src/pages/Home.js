@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../App";
 
-const Home = ({error, setError}) =>{
+const Home = () =>{
+    const context = useContext(AppContext);
+    const {error} = context;
+    const {setError} = context;
 
-    // useEffect(()=>{
-    //     return () =>{
-    //         console.log('page change');
-    //         setError('');
-    //     } 
-    // }, [setError])
+    useEffect(()=>{
+        return () =>{
+            setError('');
+        } 
+    }, [])
 
     return(
         <div className="home">

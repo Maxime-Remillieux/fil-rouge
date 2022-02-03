@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../App";
 
-const Logout =  ({ logout }) => {
+const Logout =  () => {
     const navigate = useNavigate();
+    const context = useContext(AppContext);
 
     useEffect(()=>{
-        logout();
+        context.logout();
         navigate('/');     
-    }, [logout, navigate])
+    }, [])
 
     return null;
 };

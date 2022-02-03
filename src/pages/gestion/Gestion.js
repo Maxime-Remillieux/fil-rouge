@@ -3,15 +3,18 @@ import GestionHome from "./GestionHome";
 import GestionLivres from "./GestionLivres";
 import GestionUsers from "./GestionUsers";
 import GestionLoans from "./GestionLoans";
-import { Navigate } from "react-router-dom";
 import NewBook from "./NewBook";
 import NewUser from "./NewUser";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../../App";
 
-const Gestion = ({ userState, isGranted, setError }) => {
+const Gestion = () => {
     // const [keyword, setKeyword] = useState('');
-    const { userData } = userState;
-    const { userConnected } = userState;
+    const context = useContext(AppContext);
+    const { userData } = context.userState;
+    const { userConnected } = context.userState;
+    const {setError} = context;
+    const {isGranted} = context;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,29 +25,26 @@ const Gestion = ({ userState, isGranted, setError }) => {
             setError('Vous n\'avez pas les droits pour accéder à cette page');
             navigate('/');
         }
-    }, [userConnected, isGranted]);
+    }, [userConnected, isGranted, navigate, setError]);
+
+
 
     if (!userConnected) return null;
 
     if (!isGranted('ROLE_ADMIN')) return null;
 
-    const headers = {
-        "Content-Type": 'application/json',
-        "Authorization": 'Bearer ' + userData.token
-    };
+
 
     return (
         <Routes>
             <Route path="/" element={<GestionHome />} />
-            <Route path="/livres" element={<GestionLivres headers={headers} setError={setError} />} />
-            <Route path="/users" element={<GestionUsers headers={headers} setError={setError} />} />
-            <Route path="/emprunts" element={<GestionLoans headers={headers} setError={setError} />} />
-            <Route path="/livre/new" element={<NewBook headers={headers} setError={setError} />} />
-            <Route path="/user/new" element={<NewUser headers={headers} setError={setError} />} />
+            <Route path="/livres" element={<GestionLivres />} />
+            <Route path="/users" element={<GestionUsers />} />
+            <Route path="/emprunts" element={<GestionLoans />} />
+            <Route path="/livre/new" element={<NewBook />} />
+            <Route path="/user/new" element={<NewUser />} />
         </Routes>
     )
-
-
 };
 
 export default Gestion;

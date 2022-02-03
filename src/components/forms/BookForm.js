@@ -43,8 +43,8 @@ const BookForm = ({onSubmit}) => {
                 <div>
                     <span>
                         <label htmlFor="theme">Thèmes</label>
-                        <input {...register('theme.name')} type="text"id='theme'/>
-                        <input {...register('theme.id')}type="hidden" value="0" id="theme-id" className="input-field"/>
+                        <input {...register('themes.theme0.name')} type="text"id='theme'/>
+                        <input {...register('themes.theme0.id')}type="hidden" value="0" id="theme-id" className="input-field"/>
                     </span>
                     <span>
                         <label>Image</label>

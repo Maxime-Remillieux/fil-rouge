@@ -12,6 +12,7 @@ const searchFields = {
     "b.release_at": "Date",
     "t.name": "Thème"
 };
+
 const url = "http://localhost:8000/api/book/";
 
 const links = [
@@ -24,18 +25,17 @@ const links = [
 
 
 
-const GestionLivres = ({headers, setError, logout}) => {
+const GestionLivres = () => {
     const pageData= {
         interfaceData: {
             links: links,
             searchFields: searchFields
         },
         url: url,
-        headers: headers
     }
 
 
-    return <GestionTable row={BookRow} pageData={pageData} setError={setError} logout={logout}/>
+    return <GestionTable row={BookRow} pageData={pageData}/>
 }
 
 export default GestionLivres;
