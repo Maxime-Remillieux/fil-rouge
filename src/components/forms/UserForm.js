@@ -15,7 +15,6 @@ const UserForm = ({ onSubmit }) => {
 
                 axios.get(url)
                 .then(res=>{
-                    
                     console.log(res.data);
                     setCities(res.data);
                 })

@@ -19,6 +19,33 @@ class AuthorRepository extends ServiceEntityRepository
         parent::__construct($registry, Author::class);
     }
 
+    /**
+     * @return Author[] Returns an array of Author objects
+     */
+    public function searchAuthors(?array $data = null){
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('a')
+        ->from('App\Entity\Author', 'a');
+
+        if($data != null){
+            $i = 1;
+            foreach ($data as $key => $value) {
+                if($i == 1){
+                    $qb->where($key . ' like ?' . $i);
+                }else{
+                    $qb->orWhere($key . ' like ?' . $i);
+                }
+                $qb->setParameter($i, '%' . $value . '%');
+                $i++;
+            }
+        }
+        $query = $qb->getQuery();
+        $authors = $query->getResult();
+
+        return $authors;
+    }
+
     // /**
     //  * @return Author[] Returns an array of Author objects
     //  */

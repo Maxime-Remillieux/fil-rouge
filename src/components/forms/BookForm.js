@@ -1,7 +1,28 @@
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { AppContext } from "../../App";
 
 const BookForm = ({onSubmit}) => {
     const { register, handleSubmit } = useForm();
+    const [authors, setAuthors] = useState([]);
+    const context = useContext(AppContext);
+
+    const handleKeyPress = (e) =>{
+        let value = e.target.value;
+        let reqData = {};
+        reqData['name'] = value;
+
+        if(value.length > 1){
+            axios.post('http://localhost:8000/api/author/', reqData, {headers: {Authorization: "Bearer " + context.userState.userData.token}})
+            .then(res=>{
+                setAuthors(res.data);
+            })
+            .catch(e=>{
+                console.log(e);
+            })
+        }
+    }
 
     return (
         <div className="bookForm">
@@ -20,7 +41,13 @@ const BookForm = ({onSubmit}) => {
                 <div>
                     <span>
                         <label htmlFor="author-name">Nom auteur</label>
-                        <input {...register('author.name')} type="text" id="author-name"/>
+                        <input onKeyPress={handleKeyPress} {...register('author.name')} list="authorList" autoComplete='off' type="text" id="author-name"/>
+                        <datalist id="authorList">
+                            { authors.map(author=>(
+                                <option key={author.id} value={author.firstname + ' ' + author.name}/>
+                            ))
+                            }
+                        </datalist>
                     </span>
                     <span>
                         <label htmlFor='author-firstname'>Prénom auteur</label>
